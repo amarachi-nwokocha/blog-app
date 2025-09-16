@@ -6,7 +6,7 @@ export default async function BlogData() {
 let blogData= null
 try{
     const blogsRes = await fetch('https://jsonplaceholder.typicode.com/posts', {
-            cache: "no-store",
+        next: { revalidate: 60 },
         })
  blogData = await blogsRes.json();
 
