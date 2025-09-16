@@ -2,7 +2,7 @@ import BlogCards from "./components/BlogCards";
 import BlogModal from "./components/modal";
 
 
-export const BlogData = async() => {
+export default async function BlogData() {
 let blogData= null
 try{
     const blogsRes = await fetch('https://jsonplaceholder.typicode.com/posts', {
