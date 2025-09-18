@@ -5,10 +5,25 @@ import { useState } from "react"
 
 export default function BlogModal() {
   const [isOpen, setIsOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   async function handleSubmit(formData: FormData) {
-    const result = await createBlog(formData)
-    alert(`Json Placeholder doesnt allow post so here is the data\n\nTitle: ${result.title}\nBody: ${result.body}`)
+    try {
+      setLoading(true)
+      
+      const result = await createBlog(formData)
+
+      alert(
+        `Json Placeholder doesn’t allow post so here is the data\n\nTitle: ${result.title}\nBody: ${result.body}`
+      )
+
+      // ✅ Close modal after submission succeeds
+      setIsOpen(false)
+    } catch (err) {
+      console.error("Error creating blog:", err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -30,22 +45,33 @@ export default function BlogModal() {
                 name="title"
                 placeholder="Title"
                 className="border p-2 w-full"
+                required
               />
               <textarea
                 name="body"
                 placeholder="Body"
                 className="border p-2 w-full mt-2"
+                required
               />
+
+              {/* Submit button with loading state */}
               <button
                 type="submit"
-                className="mt-3 px-4 py-2 bg-blue-600 text-white rounded"
+                disabled={loading}
+                className={`mt-3 px-4 py-2 rounded text-white ${
+                  loading
+                    ? "bg-gray-500 cursor-not-allowed"
+                    : "bg-blue-600 hover:bg-blue-700"
+                }`}
               >
-                Create Post
+                {loading ? "Submitting..." : "Create Post"}
               </button>
             </form>
+
             <button
-              className="mt-2 text-sm text-gray-500"
+              className="mt-2 text-sm text-gray-400 hover:text-gray-200"
               onClick={() => setIsOpen(false)}
+            
             >
               Close
             </button>
